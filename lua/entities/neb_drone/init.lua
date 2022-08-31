@@ -20,7 +20,7 @@ function ENT:Initialize()
     self:SetMoveType(MOVETYPE_NONE)
     self:DrawShadow(false)
     self:PhysicsInitBox(Vector(-600,-600,-50), Vector(600, 600, 50))
-    self.Health = 1000000
+    self.HealthValue = 1000000
 
     hook.Add("OnPlayerStart", self, function(s, ply)
         ply:Wait(5, function()
@@ -51,13 +51,13 @@ function ENT:Think()
     return true
 end
 
-ENT.Health = 10
+ENT.HealthValue = 10
 function ENT:OnTakeDamage(dmg)
-    self.Health = self.Health - dmg:GetDamage()
-    if (self.Health <= 0) then
+    self.HealthValue = self.HealthValue - dmg:GetDamage()
+    if (self.HealthValue <= 0) then
         local eff = EffectData()
         eff:SetOrigin(self:GetPos())
-        util.Effect("Explosion", eff)
+        util.Effect("Explosion", eff, true, true)
 
         local att = dmg:GetAttacker()
         if IsValid(att) and att:IsPlayer() then
