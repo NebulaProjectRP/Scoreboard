@@ -47,6 +47,7 @@ end
 
 function ENT:Think()
     self:SetPos( Vector(-1900, -1560, 500) )
+    self:SetAngles( Angle(0, 0, 0) )
     self:NextThink(CurTime() + 5)
     return true
 end
