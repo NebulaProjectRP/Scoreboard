@@ -29,7 +29,7 @@ function ENT:Initialize()
 
     hook.Add("PlayerDisconnected", self, function(s, ply)
         timer.Simple(0, function()
-            self:NetworkItems()
+            self:NetworkTimes()
         end)
     end)
 
