@@ -92,10 +92,10 @@ function ENT:OnTakeDamage(dmg)
                     Force = 100,
                     IgnoreEntity = self,
                     Num = 5,
-                    Damage = 800,
+                    Damage = 1,
                     Callback = function(_att, tr, _dmg)
-                        if (IsValid(tr.Entity) and tr.Entity != att) then
-                            _dmg:SetDamage(0)
+                        if (IsValid(tr.Entity) and tr.Entity == att) then
+                            _dmg:SetDamage(800)
                         end
                     end
                 }
