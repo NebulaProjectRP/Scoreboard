@@ -245,13 +245,13 @@ end
 ENT.NextUpdateB = 0
 
 local phrases = {
-    "Eat doritos",
-    "There are drills hidden behind the walls",
-    "You can't see the walls",
-    "Dog food is the best",
-    "Nobody likes you",
+    "Welcome to Nebula Roleplay",
+    "eat doritos",
+    "there are drills hidden behind the walls",
+    "you can't see the walls",
+    "dog food is the best",
+    "nobody likes you",
     "qwertyuiopasdfghjklzxcvbnm",
-    "welcome to the darkrp",
     "eat a bag of chips",
     "use the hammer",
     "open the door",
