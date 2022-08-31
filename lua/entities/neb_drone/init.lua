@@ -20,6 +20,7 @@ function ENT:Initialize()
     self:SetMoveType(MOVETYPE_NONE)
     self:DrawShadow(false)
     self:PhysicsInitBox(Vector(-600,-600,-50), Vector(600, 600, 50))
+    self.Health = 1000000
 
     hook.Add("OnPlayerStart", self, function(s, ply)
         ply:Wait(5, function()
@@ -44,7 +45,33 @@ function ENT:Initialize()
 
 end
 
+function ENT:Think()
+    self:SetPos( Vector(-1900, -1560, 500) )
+    self:NextThink(CurTime() + 5)
+    return true
+end
+
+ENT.Health = 10
 function ENT:OnTakeDamage(dmg)
+    self.Health = self.Health - dmg:GetDamage()
+    if (self.Health <= 0) then
+        local eff = EffectData()
+        eff:SetOrigin(self:GetPos())
+        util.Effect("Explosion", eff)
+
+        local att = dmg:GetAttacker()
+        if IsValid(att) and att:IsPlayer() then
+            att:giveItem("case_suits1", 1)
+        end
+
+        timer.Simple(math.random(100, 500), function()
+            local ent = ents.Create( "neb_drone" )
+            ent:SetPos( Vector(-1900, -1560, 500) )
+            ent:Spawn()
+            ent:Activate()
+        end)
+        self:Remove()
+    end
     local att = dmg:GetAttacker()
     if (att:IsPlayer()) then
         net.Start("NebulaDrone.SendAdvert")
@@ -61,8 +88,17 @@ function ENT:OnTakeDamage(dmg)
                     Tracer = 1,
                     TracerName = "AirboatGunHeavyTracer",
                     Force = 100,
-                    Damage = 800,
+                    Damage = 1,
                 }
+                local tr = util.TraceLine({
+                    start = self:GetPos(),
+                    endpos = self:GetPos() + bullet.Dir * 10000,
+                    filter = self
+                })
+
+                if (IsValid(tr.HitEntity)) then
+                    tr.HitEntity:TakeDamage(750, att, self)
+                end
                 for k = 1, 5 do
                     self:FireBullets(bullet)
                 end
@@ -112,7 +148,6 @@ net.Receive("NebulaDrone.RequestTime", function(l, ply)
         ply.lastTimeAsk = 0
     end
 
-    MsgN("Requesting")
     if (ply.lastTimeAsk < CurTime()) then
         ply.lastTimeAsk = CurTime() + 10
         ents.FindByClass("neb_drone")[1]:NetworkTimes(ply)
