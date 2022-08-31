@@ -84,11 +84,10 @@ function ENT:NetworkTimes(ply)
     local max = math.min(player.GetCount(), 8)
     net.Start("NebulaDrone.SendTimes")
     net.WriteUInt(max, 4)
-    local ent_index, v
-    for k = 1, max do
-        v, ent_index = next(data, ent_index)
-        net.WriteEntity(v)
-        net.WriteUInt(data[v], 24)
+    local i = 1
+    for ply, time in pairs(data) do
+        net.WriteEntity(tply)
+        net.WriteUInt(time, 24)
     end
 
     if (ply) then
