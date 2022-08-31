@@ -65,7 +65,7 @@ function ENT:OnTakeDamage(dmg)
             att:giveItem("case_suits1", 1)
         end
 
-        timer.Simple(math.random(100, 500), function()
+        timer.Simple(math.random(250, 520), function()
             local ent = ents.Create( "neb_drone" )
             ent:SetPos( Vector(-1900, -1560, 500) )
             ent:Spawn()
