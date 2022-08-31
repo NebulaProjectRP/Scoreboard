@@ -66,7 +66,7 @@ ENT.HasInitialized = false
 ENT.Players = {}
 ENT.Avatars = {}
 ENT.NextUpdate = 0
-ENT.DisplayMode = 2
+ENT.DisplayMode = 0
 
 local green = Color(150, 255, 50)
 local blue = Color(50, 100, 255)
@@ -94,19 +94,28 @@ function ENT:RenderTime()
             av.Time = v.playtime
 
             av:MoveTo(16, y, .5, 0, 1, function()
-                self.NextUpdate = RealTime() + 60
+                self.NextUpdate = RealTime() + 10
                 self.HasInitialized = false
-                self.DisplayMode = 1
+                self.DisplayMode = 0
             end)
 
             table.insert(self.Avatars, av)
         end
     else
+        local found = false
         for k, v in pairs(self.Avatars) do
             if not IsValid(v) then continue end
+            found = true
             v:PaintManual()
             local tx, _ = draw.SimpleText(v.Name, NebulaUI:Font(26), v:GetX() + v:GetWide() + 8, v:GetY() + v:GetTall() / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
             draw.SimpleText(string.NicePlayTime(v.Time), NebulaUI:Font(32), 512 - v:GetX(), v:GetY() + v:GetTall() / 2, green, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+        end
+        if (not found) then
+            self.NextUpdate = RealTime()
+            self.HasInitialized = false
+            self.DisplayMode = 0
+            net.Start("NebulaDrone.RequestTime")
+            net.SendToServer()
         end
     end
 end
@@ -217,7 +226,7 @@ function ENT:RenderGangs()
             av:MoveTo(16, y, .5, 0, 1, function()
                 self.NextUpdate = RealTime() + 5
                 self.HasInitialized = false
-                self.DisplayMode = 0
+                self.DisplayMode = 2
             end)
 
             table.insert(self.Avatars, av)

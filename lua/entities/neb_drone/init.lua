@@ -3,6 +3,7 @@ include("shared.lua")
 
 util.AddNetworkString("NebulaDrone.SendTimes")
 util.AddNetworkString("NebulaDrone.SendAdvert")
+util.AddNetworkString("NebulaDrone.RequestTime")
 
 function ENT:SpawnFunction( ply, tr, cs )
     if ( !tr.Hit ) then return end
@@ -20,8 +21,8 @@ function ENT:Initialize()
     self:DrawShadow(false)
     self:PhysicsInitBox(Vector(-600,-600,-50), Vector(600, 600, 50))
 
-    hook.Add("PlayerInitialSpawn", self, function(s, ply)
-        ply:Wait(10, function()
+    hook.Add("OnPlayerStart", self, function(s, ply)
+        ply:Wait(5, function()
             self:NetworkTimes()
         end)
     end)
@@ -41,7 +42,6 @@ function ENT:Initialize()
         end
     end)
 
-    self:NetworkTimes()
 end
 
 function ENT:OnTakeDamage(dmg)
@@ -103,4 +103,17 @@ hook.Add("InitPostEntity", "SpawnDrone", function()
     ent:SetPos( Vector(-1900, -1560, 500) )
     ent:Spawn()
     ent:Activate()
+end)
+
+
+net.Receive("NebulaDrone.RequestTime", function(l, ply)
+    if not ply.lastTimeAsk then
+        ply.lastTimeAsk = 0
+    end
+
+    MsgN("Requesting")
+    if (ply.lastTimeAsk < CurTime()) then
+        ply.lastTimeAsk = CurTime() + 10
+        ents.FindByClass("neb_drone")[1]:NetworkTimes(ply)
+    end
 end)
