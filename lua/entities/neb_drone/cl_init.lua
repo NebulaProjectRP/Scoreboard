@@ -84,6 +84,7 @@ function ENT:RenderTime()
         end
 
         for k, v in pairs(_DronePlayTimes or {}) do
+            if not IsValid(v.ent) then continue end
             local av = vgui.Create("AvatarImage")
             local y = 28 * (k - 1) + 182
             av:SetPlayer(v.ent, 64)
