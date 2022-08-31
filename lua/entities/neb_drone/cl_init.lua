@@ -237,7 +237,7 @@ function ENT:RenderGangs()
             if not IsValid(v) then continue end
             v:PaintManual()
             draw.SimpleText(v.name, NebulaUI:Font(26), v:GetX() + v:GetWide() + 8, v:GetY() + v:GetTall() / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-            draw.SimpleText(v.data, NebulaUI:Font(26), 512 - v:GetX(), v:GetY() + v:GetTall() / 2, green, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+            draw.SimpleText(self.DisplayType == "money" and DarkRP.formatMoney(v.data) or v.data, NebulaUI:Font(26), 512 - v:GetX(), v:GetY() + v:GetTall() / 2, green, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
         end
     end
 end
