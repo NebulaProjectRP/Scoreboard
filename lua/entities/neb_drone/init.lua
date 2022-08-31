@@ -10,14 +10,12 @@ function ENT:SpawnFunction( ply, tr, cs )
     local ent = ents.Create( cs )
     ent:SetPos( Vector(-1900, -1560, 500) )
     ent:Spawn()
-    ent:Activate()
     return ent
 end
 
 function ENT:Initialize()
     self:SetModel("models/hunter/blocks/cube8x8x4.mdl")
     self:PhysicsInitStatic(SOLID_VPHYSICS)
-    self:SetMoveType(MOVETYPE_NONE)
     self:DrawShadow(false)
     self:PhysicsInitBox(Vector(-600,-600,-50), Vector(600, 600, 50))
     self.HealthValue = 50000000
@@ -48,11 +46,13 @@ end
 function ENT:Think()
     self:SetPos( Vector(-1900, -1560, 500) )
     self:SetAngles( Angle(0, 0, 0) )
-    self:NextThink(CurTime() + 5)
+    self:NextThink(CurTime() + 3)
     return true
 end
 
 ENT.HealthValue = 10
+ENT.DamageHistory = {}
+ENT.MaxDamage = 0
 function ENT:OnTakeDamage(dmg)
     self.HealthValue = self.HealthValue - dmg:GetDamage()
     if (self.HealthValue <= 0) then
@@ -63,6 +63,15 @@ function ENT:OnTakeDamage(dmg)
         local att = dmg:GetAttacker()
         if IsValid(att) and att:IsPlayer() then
             att:giveItem("case_suits1", 1)
+            att:ChatPrint("You have killed the drone and received a case of suits.")
+
+            local money = 1000000
+            for ass, dmg in pairs(self.DamageHistory) do
+                if not IsValid(ass) then continue end
+                local money_cut = money * (dmg / self.MaxDamage)
+                ass:giveMoney(money_cut)
+                ass:ChatPrint("You've received " .. DarkRP.formatMoney(math.Round(money_cut)) .. " for your damage.")
+            end
         end
 
         timer.Simple(math.random(250, 520), function()
@@ -75,6 +84,8 @@ function ENT:OnTakeDamage(dmg)
     end
     local att = dmg:GetAttacker()
     if (att:IsPlayer()) then
+        self.DamageHistory[att] = (self.DamageHistory[att] or 0) + dmg:GetDamage()
+        self.MaxDamage = math.max(self.MaxDamage, self.DamageHistory[att])
         net.Start("NebulaDrone.SendAdvert")
         net.WriteEntity(self)
         net.WriteString("Obliterating " .. att:Nick())
@@ -86,7 +97,7 @@ function ENT:OnTakeDamage(dmg)
                 local bullet = {
                     Src = self:GetPos() + normal * 96,
                     Dir = normal,
-                    Spread = Vector(.0325, .0325, .0325),
+                    Spread = Vector(.035, .035, .035),
                     Tracer = 1,
                     TracerName = "AirboatGunHeavyTracer",
                     Force = 100,
@@ -95,21 +106,10 @@ function ENT:OnTakeDamage(dmg)
                     Damage = 1,
                     Callback = function(_att, tr, _dmg)
                         if (IsValid(tr.Entity) and tr.Entity == att) then
-                            _dmg:SetDamage(800)
+                            _dmg:SetDamage(400)
                         end
                     end
                 }
-                /*
-                local tr = util.TraceLine({
-                    start = self:GetPos(),
-                    endpos = self:GetPos() + bullet.Dir * 10000 + VectorRand() * bullet.Spread,
-                    filter = self
-                })
-
-                if (IsValid(tr.Entity) and tr.Entity == att) then
-                    tr.Entity:TakeDamage(750, att, self)
-                end
-                */
                 self:FireBullets(bullet)
             end)
         end)
@@ -148,7 +148,6 @@ hook.Add("InitPostEntity", "SpawnDrone", function()
     local ent = ents.Create( "neb_drone" )
     ent:SetPos( Vector(-1900, -1560, 500) )
     ent:Spawn()
-    ent:Activate()
 end)
 
 
