@@ -82,13 +82,16 @@ function ENT:OnTakeDamage(dmg)
         self:Wait(.3, function()
             self:EmitSound("npc/turret_floor/deploy.wav", 165, 75, 1, CHAN_AUTO)
             self:Wait(.7, function()
+                local normal = (att:GetPos() - self:GetPos() + att:OBBCenter()):GetNormal()
                 local bullet = {
-                    Src = self:GetPos(),
-                    Dir = (att:GetPos() - self:GetPos() + att:OBBCenter()):GetNormal(),
+                    Src = self:GetPos() + normal * 96,
+                    Dir = normal,
                     Spread = Vector(.025, .025, .025),
                     Tracer = 1,
                     TracerName = "AirboatGunHeavyTracer",
                     Force = 100,
+                    IgnoreEntity = self,
+                    Num = 5,
                     Damage = 800,
                     Callback = function(_att, tr, _dmg)
                         if (IsValid(tr.Entity) and tr.Entity != att) then
@@ -107,9 +110,7 @@ function ENT:OnTakeDamage(dmg)
                     tr.Entity:TakeDamage(750, att, self)
                 end
                 */
-                for k = 1, 5 do
-                    self:FireBullets(bullet)
-                end
+                self:FireBullets(bullet)
             end)
         end)
     end
