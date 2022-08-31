@@ -1,0 +1,40 @@
+"UnlitGeneric"
+{
+	"$basetexture" "models/asapgaming/scoreboard/screen_b"
+    "$basetexturetransform" "center .5 .5 scale 1 1 rotate 0 translate 0 0"	
+//	"$detail" "models/props_meow/screen_dt"
+	"$detailtexturetransform" "center .5 .5 scale 64 4 rotate 0 translate 0 0"
+	$detailscale 1
+	$detailblendmode 0
+	$detailblendfactor 1	
+	
+	
+		"$scale" "[1 1]"
+        "$translate" "[0 0]"
+		"$num" "0"
+		"$num2" "0"
+
+        "Proxies"
+        {
+            "LinearRamp"
+            {
+                "rate" .05
+                "initialValue" 0
+                "resultVar" "$num2"
+            }
+
+			"Add"
+			{
+			srcVar1 $num
+			srcVar2 $num2
+			resultvar "$translate[0]"
+			}
+			
+            "TextureTransform"
+            {
+                "translateVar" "$translate"
+				"scaleVar" "$scale"
+                "resultVar" "$basetexturetransform"
+            }			
+        }	
+}

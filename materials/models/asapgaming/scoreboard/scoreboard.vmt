@@ -1,0 +1,21 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/asapgaming/scoreboard/scoreboard"
+	"$bumpmap" "models/asapgaming/scoreboard/scoreboard_normal"
+	"$lightwarptexture" "models/asapgaming/scoreboard/scoreboard_lw"
+	"$halflambert" "1"
+	"$phong" "1"
+	"$phongboost" "2"
+	"$phongexponent" "10"
+	"$phongfresnelranges" "[1 3 7]"
+	
+
+	"$envmap" "env_cubemap"
+	"$normalmapalphaenvmapmask" "1"
+	"$envmaptint" "[.02 .02 .02]"		
+	
+	
+	"$rimlight" "1"
+	"$rimlightexponent" "10"
+	"$rimlightboost" "1"	
+}
