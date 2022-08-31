@@ -20,7 +20,7 @@ function ENT:Initialize()
     self:SetMoveType(MOVETYPE_NONE)
     self:DrawShadow(false)
     self:PhysicsInitBox(Vector(-600,-600,-50), Vector(600, 600, 50))
-    self.HealthValue = 1000000
+    self.HealthValue = 50000000
 
     hook.Add("OnPlayerStart", self, function(s, ply)
         ply:Wait(5, function()
@@ -79,9 +79,9 @@ function ENT:OnTakeDamage(dmg)
         net.WriteEntity(self)
         net.WriteString("Obliterating " .. att:Nick())
         net.SendPVS(self:GetPos() - Vector(0, 0, 96))
-        self:Wait(.5, function()
+        self:Wait(.3, function()
             self:EmitSound("npc/turret_floor/deploy.wav", 165, 75, 1, CHAN_AUTO)
-            self:Wait(1.5, function()
+            self:Wait(.7, function()
                 local bullet = {
                     Src = self:GetPos(),
                     Dir = (att:GetPos() - self:GetPos() + att:OBBCenter()):GetNormal(),
@@ -90,16 +90,23 @@ function ENT:OnTakeDamage(dmg)
                     TracerName = "AirboatGunHeavyTracer",
                     Force = 100,
                     Damage = 1,
+                    Callback = function(_att, tr, _dmg)
+                        if (IsValid(tr.Entity) and tr.Entity != att) then
+                            _dmg:SetDamage(0)
+                        end
+                    end
                 }
+                /*
                 local tr = util.TraceLine({
                     start = self:GetPos(),
-                    endpos = self:GetPos() + bullet.Dir * 10000,
+                    endpos = self:GetPos() + bullet.Dir * 10000 + VectorRand() * bullet.Spread,
                     filter = self
                 })
 
                 if (IsValid(tr.Entity) and tr.Entity == att) then
                     tr.Entity:TakeDamage(750, att, self)
                 end
+                */
                 for k = 1, 5 do
                     self:FireBullets(bullet)
                 end
