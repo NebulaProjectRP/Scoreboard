@@ -86,12 +86,12 @@ function ENT:OnTakeDamage(dmg)
                 local bullet = {
                     Src = self:GetPos() + normal * 96,
                     Dir = normal,
-                    Spread = Vector(.025, .025, .025),
+                    Spread = Vector(.0325, .0325, .0325),
                     Tracer = 1,
                     TracerName = "AirboatGunHeavyTracer",
                     Force = 100,
                     IgnoreEntity = self,
-                    Num = 5,
+                    Num = 3,
                     Damage = 1,
                     Callback = function(_att, tr, _dmg)
                         if (IsValid(tr.Entity) and tr.Entity == att) then
