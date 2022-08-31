@@ -86,8 +86,10 @@ function ENT:NetworkTimes(ply)
     net.WriteUInt(max, 4)
     local i = 1
     for ply, time in pairs(data) do
+        if (i >= max) then break end
         net.WriteEntity(tply)
         net.WriteUInt(time, 24)
+        i = i + 1
     end
 
     if (ply) then
