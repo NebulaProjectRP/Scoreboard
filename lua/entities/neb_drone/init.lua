@@ -97,8 +97,8 @@ function ENT:OnTakeDamage(dmg)
                     filter = self
                 })
 
-                if (IsValid(tr.HitEntity) and tr.HitEntity == att) then
-                    tr.HitEntity:TakeDamage(750, att, self)
+                if (IsValid(tr.Entity) and tr.Entity == att) then
+                    tr.Entity:TakeDamage(750, att, self)
                 end
                 for k = 1, 5 do
                     self:FireBullets(bullet)
