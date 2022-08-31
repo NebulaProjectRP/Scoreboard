@@ -89,7 +89,7 @@ function ENT:OnTakeDamage(dmg)
                     Tracer = 1,
                     TracerName = "AirboatGunHeavyTracer",
                     Force = 100,
-                    Damage = 1,
+                    Damage = 800,
                     Callback = function(_att, tr, _dmg)
                         if (IsValid(tr.Entity) and tr.Entity != att) then
                             _dmg:SetDamage(0)
