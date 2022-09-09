@@ -307,7 +307,9 @@ function ENT:RenderScreen()
 end
 
 function ENT:Draw()
+    self:SetPos(Vector(-1900, -1560, 500))
     local height = math.cos(RealTime() / 2) * 64
+    self.Drone:SetParent(self)
     self.Drone:SetLocalPos(Vector(0, 0, height))
     self.Drone:SetLocalAngles(Angle(0, (RealTime() * 8) % 360))
     self.Drone:SetCycle((RealTime() / 4) % 1)

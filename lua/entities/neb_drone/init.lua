@@ -17,7 +17,7 @@ function ENT:Initialize()
     self:SetModel("models/hunter/blocks/cube8x8x4.mdl")
     self:PhysicsInitStatic(SOLID_VPHYSICS)
     self:DrawShadow(false)
-    self:PhysicsInitBox(Vector(-600,-600,-50), Vector(600, 600, 50))
+    //self:PhysicsInitBox(Vector(-600,-600,-50), Vector(600, 600, 50))
     self.HealthValue = 50000000
 
     hook.Add("OnPlayerStart", self, function(s, ply)
@@ -44,7 +44,7 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-    self:SetPos( Vector(-1900, -1560, 500) )
+    self:SetPos(Vector(-1900, -1560, 500))
     self:SetAngles( Angle(0, 0, 0) )
     self:NextThink(CurTime() + 3)
     return true
