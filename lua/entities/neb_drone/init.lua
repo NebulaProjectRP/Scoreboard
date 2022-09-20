@@ -62,16 +62,16 @@ function ENT:OnTakeDamage(dmg)
 
         local att = dmg:GetAttacker()
         if IsValid(att) and att:IsPlayer() then
-            att:giveItem("case_suits1", 1)
-            att:ChatPrint("You have killed the drone and received a case of suits.")
 
-            local money = 1000000
-            for ass, dmg in pairs(self.DamageHistory) do
-                if not IsValid(ass) then continue end
-                local money_cut = money * (dmg / self.MaxDamage)
-                ass:giveMoney(money_cut)
-                ass:ChatPrint("You've received " .. DarkRP.formatMoney(math.Round(money_cut)) .. " for your damage.")
-            end
+            NebulaEncounters:GiveReward(att, {
+                item = "case_suits1",
+                name = "Drone",
+                reward = "<rainbow=3>case of suits</rainbow>",
+                money = 1000000,
+                share = self.DamageHistory,
+                maxdamage = self.MaxDamage
+            })
+
         end
 
         timer.Simple(math.random(250, 520), function()

@@ -309,6 +309,10 @@ end
 function ENT:Draw()
     self:SetPos(Vector(-1900, -1560, 500))
     local height = math.cos(RealTime() / 2) * 64
+    if not IsValid(self.Drone) then
+        self:Initialize()
+        return
+    end
     self.Drone:SetParent(self)
     self.Drone:SetLocalPos(Vector(0, 0, height))
     self.Drone:SetLocalAngles(Angle(0, (RealTime() * 8) % 360))
